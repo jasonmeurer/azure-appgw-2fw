@@ -48,4 +48,4 @@ As demand for your web services increase, you can add more web servers and deplo
 * Release Notes: Included in this repository.
 * About the [VM-Series Firewall for Azure](https://azure.paloaltonetworks.com)
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-stdv2%2Fmaster%2Fazuredeploy.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
