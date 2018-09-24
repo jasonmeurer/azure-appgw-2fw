@@ -660,9 +660,9 @@
 		},
         "dependsOn": [
          "[parameters('firewallAvSet')]",
-      	 "[concat(parameters('virtualNetworkName'),'MgmtNic',copyindex())]",
-		 "[concat(parameters('virtualNetworkName'),'UntrustNic',copyindex())]",
-		 "[concat(parameters('virtualNetworkName'),'TrustNic',copyindex())]"
+      	 "[concat(parameters('firewallVmName'),'MgmtNic',copyindex())]",
+		 "[concat(parameters('firewallVmName'),'UntrustNic',copyindex())]",
+		 "[concat(parameters('firewallVmName'),'TrustNic',copyindex())]"
       ],
         "plan": {
            "name": "[parameters('imageSku')]",
@@ -701,17 +701,17 @@
             },
             "networkProfile": {
                 "networkInterfaces": [{
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualNetworkName'),'MgmtNic',copyindex()))]",
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('firewallVmName'),'MgmtNic',copyindex()))]",
                     "properties": {
                         "primary": true
                     }
                 }, {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualNetworkName'),'UntrustNic',copyindex()))]",
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('firewallVmName'),'UntrustNic',copyindex()))]",
                     "properties": {
                         "primary": false
                     }
                 }, {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualNetworkName'),'TrustNic',copyindex()))]",
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('firewallVmName'),'TrustNic',copyindex()))]",
                     "properties": {
                         "primary": false
                     }
