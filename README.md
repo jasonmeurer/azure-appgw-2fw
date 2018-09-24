@@ -1,6 +1,28 @@
-# Using VM-Series Firewalls, the Azure Application Gateway and Standard ILB to Secure Internet-Facing Web Workloads v2
+# Using Deploy up to 6 VM-Series Firewalls with an Application Gateway
 
-Adapted from the [Azure Application Gateway ARM template](https://github.com/PaloAltoNetworks/azure-applicationgateway).
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
+
+**Can be deployed to a New or Existing Resource Group and New or Existing VNET**
+
+When deploying into an existing VNET, the Subnet Names and Prefixes must match the existing VNET.
+
+The Firewalls will be deployed with Standard SKU Public IP addresses and Managed Disks.  Standard SKU PIPs were chosen to support the use of a Standard SKU Load Balancer should the design warrant.
+
+While bootstrapping is not required, sample Bootstrap File and Init-cfg.txt files have been included in this repository.  If Bootstrapping is not utilized, see the following parameters to None or leave blank.
+[Bootstrap the VM-Series Firewall in Azure](https://www.paloaltonetworks.com/documentation/81/virtualization/virtualization/bootstrap-the-vm-series-firewall/bootstrap-the-vm-series-firewall-in-azure)
+	* customStorageAccount
+	* customAccessKey
+	* customFileShare
+	* customShareDirectory (Not required even if bootstrapping)
+
+The Bootstrap file contains a user account u:pandemo p:demopassword.  
+The Bootstrap file contains two objects that should be udpdate post deployment.  The Untrust IP Address and an inside Load Balancer placeholder.
+
+**Documentation**
+* Release Notes: Included in this repository.
+* About the [VM-Series Firewall for Azure](https://azure.paloaltonetworks.com)
+
+
 
 Instructions
 
@@ -28,24 +50,7 @@ Instructions
 
 This ARM template deploys two VM-Series firewalls between a pair of Azure load balancers. The external load balancer is an Azure Application Gateway (a web load balancer) that also serves as the Internet facing gateway, which  receives traffic and distributes it to the VM-Series firewalls. The firewalls enforce security policies to protect your workloads, and send the allowed traffic to the internal load balancer which is an Azure Load Balancer (Layer 4) that load balances across a pair of sample Apache web servers.  The ILB is utilizes a Standard Preview which can be used with HA Ports for Outbound and East/West traffic.
 
-[Standard Load Balancer](https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-standard-overview)
-
-[HA Ports](https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-ha-ports-overview)
-
-Standard Preview is available in the following regions.
-* East US 2
-* Central US
-* North Europe
-* West Central US
-* West Europe
-* Southeast Asia
-
-The iLB has two Front End configurations.  The first load balances the web servers.  The second utilizes the HA Port feature coupled with UDRs to send Web to DB and DB to Web traffic through the firewall.
-
-As demand for your web services increase, you can add more web servers and deploy additional VM-Series firewalls for more capacity. The VM-Series firewalls are deployed in separate Availability Sets for higher availability and redundancy against planned and unplanned outages. Refer to Azure documentation for more information on [Availability Sets](https://docs.microsoft.com/en-us/azure/virtual-machines/virtual-machines-linux-manage-availability). A sample configuration file for VM-Series firewall is also included. After you import this configuration file, be sure to (a) customize the security policies to your needs and (b) <b>set a custom password</b> for the firewall instead of the value in the sample file. Refer to the documentation for steps on how to import the sample configuration file. 
-
 **Documentation**
 * Release Notes: Included in this repository.
 * About the [VM-Series Firewall for Azure](https://azure.paloaltonetworks.com)
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
