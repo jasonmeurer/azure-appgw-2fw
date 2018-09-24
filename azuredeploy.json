@@ -257,7 +257,7 @@
     "LoadBalancerType" : "layer-7",
     "apiVersion": "2018-06-01",
     "customDataField": "[concat('storage-account=', parameters('customStorageAccount'), ',access-key=', parameters('customAccessKey'), ',file-share=', parameters('customFileShare'), ',share-directory=', parameters('customShareDirectory'))]",
-	"pipAppGw": "[concat(parameters('virtualNetworkName'),'pipAppGw')]",
+	"pipAppGw": "[concat(parameters('appGatewayDnsName'),'pipAppGw')]",
 	"appgwsubnetref": "[concat(variables('vnetID'),'/subnets/',parameters('appGatewaySubnetName'))]",
 	"vnetname": "[parameters('virtualNetworkName')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetname'))]",
