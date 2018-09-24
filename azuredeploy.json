@@ -433,7 +433,7 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(parameters('virtualNetworkName'),'MgmtPip',copyindex())]",
+      "name": "[concat(parameters('firewallVmName'),'MgmtPip',copyindex())]",
       "location": "[variables('location')]",
 	  "copy": {
 			"name": "trustStaticNicLoop",
@@ -446,13 +446,13 @@
       "properties": {
         "publicIPAllocationMethod": "Static",
         "dnsSettings": {
-          "domainNameLabel": "[toLower(concat(parameters('virtualNetworkName'),'MgmtPip',copyindex()))]"
+          "domainNameLabel": "[toLower(concat(parameters('firewallVmName'),'MgmtPip',copyindex()))]"
         }
       }
     },
 	{
 		"type": "Microsoft.Network/networkInterfaces",
-		"name": "[concat(parameters('virtualNetworkName'),'MgmtNic',copyindex())]",
+		"name": "[concat(parameters('firewallVmName'),'MgmtNic',copyindex())]",
 		"apiVersion": "[variables('apiVersion')]",
 		"location": "[resourceGroup().location]",
 	    "dependsOn": [
@@ -470,7 +470,7 @@
 					"properties": {
 						"privateIPAllocationMethod": "Dynamic",
 						"publicIPAddress": {
-							"id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('virtualNetworkName'),'MgmtPip',copyindex()))]"
+							"id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('firewallVmName'),'MgmtPip',copyindex()))]"
              			},
 						"subnet": {
 							"id": "[variables('subnetRefMgmt')]"
@@ -482,7 +482,7 @@
 	},
 	{
 		"type": "Microsoft.Network/networkInterfaces",
-		"name": "[concat(parameters('virtualNetworkName'),'UntrustNic',copyindex())]",
+		"name": "[concat(parameters('firewallVmName'),'UntrustNic',copyindex())]",
 		"apiVersion": "[variables('apiVersion')]",
 		"location": "[resourceGroup().location]",
 	    "dependsOn": [
@@ -516,7 +516,7 @@
 	},
 	{
 		"type": "Microsoft.Network/networkInterfaces",
-		"name": "[concat(parameters('virtualNetworkName'),'TrustNic',copyindex())]",
+		"name": "[concat(parameters('firewallVmName'),'TrustNic',copyindex())]",
 		"apiVersion": "[variables('apiVersion')]",
 		"location": "[resourceGroup().location]",
 	    "dependsOn": [
