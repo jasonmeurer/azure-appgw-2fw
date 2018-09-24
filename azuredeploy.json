@@ -27,13 +27,6 @@
         "description": "CIDR for Virtual Network"
       }
     },
-    "routeTableName": {
-      "type": "string",
-      "defaultValue": "Rttbl",
-      "metadata": {
-        "description": "CIDR for Virtual Network"
-      }
-    },
     "mgmtSubnetName": {
       "type": "string",
       "defaultValue": "Mgmt",
