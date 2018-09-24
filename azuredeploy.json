@@ -179,23 +179,6 @@
         "description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
       }
     },
-    "storageAccountName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
-      }
-    },
-    "storageAccountNewOrExisting" : {
-       "type": "string",
-       "defaultValue" : "new",
-       "allowedValues" : [
-          "new",
-          "existing"
-       ],
-       "metadata": {
-          "Description": "Select new or existing Storage Account, specified by storageAccountName"
-       }
-    },
     "storageAccountType": {
       "type": "string",
       "allowedValues": [
@@ -205,7 +188,7 @@
         "Standard_RAGRS"
       ],
       "metadata": {
-        "description": "Type of the storage account created"
+        "description": "Type of the storage account used for Firewall Managed Disk"
       },
       "defaultValue": "Standard_LRS"
     },
