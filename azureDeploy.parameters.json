@@ -6,22 +6,22 @@
       "value": "0.0.0.0/0"
     },
     "virtualNetworkAddressPrefix": {
-      "value": "192.168.0.0/16"
+      "value": "192.168.88.0/16"
     },
     "virtualNetworkNewOrExisting": {
-      "value": "existing"
+      "value": "new"
     },
     "username": {
-      "value": "DEFAULT-USER"
+      "value": "azureadmin"
     },
     "password": {
-      "value": "DEFAULT-PASSWORD"
+      "value": "adminpassword"
     },
     "storageAccountName": {
       "value": "DEFAULT-STORAGE"
     },
     "storageAccountNewOrExisting": {
-      "value": "existing"
+      "value": "new"
     },
     "StandardLoadBalancer": {
       "value": "Standard"
