@@ -2,6 +2,34 @@
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
 
+
+
+                                       +--------------------+
+                                       |  Availability Set  |
+                                       |--------------------|
+                                       |   +-------------+  |
+                                       |   |  Firewall   |  |
+                                       |   |-------------|  |
+                                    +----->|             |  |
+                                    |  |   |             |  |
+                                    |  |   +-------------+  |
+                +-------------+     |  |                    |
+                |    AppGw    |     |  |   +-------------+  |
+                |-------------|     |  |   |  Firewall   |  |
+                |             |     |  |   |-------------|  |
+                |             |+----+----->|             |  |
+                |             |     |  |   |             |  |
+                +-------------+     |  |   +-------------+  |
+                                    |  |                    |
+                                    |  |   +-------------+  |
+                                    |  |   |  Firewall   |  |
+                                    |  |   |-------------|  |
+                                    +----->|             |  |
+                                       |   |             |  |
+                                       |   +-------------+  |
+                                       |                    |
+                                       +--------------------+
+
 **Can be deployed to a New or Existing Resource Group and New or Existing VNET**
 
 When deploying into an existing VNET, the Subnet Names and Prefixes must match the existing VNET.
