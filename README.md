@@ -41,6 +41,7 @@ The Firewalls will be deployed with Standard SKU Public IP addresses and Managed
 
 While bootstrapping is not required, sample Bootstrap File and Init-cfg.txt files have been included in this repository.  
 If Bootstrapping is not utilized, see the following parameters to None or leave blank.
+u:pandemo d:demopassword
 
 [Bootstrap the VM-Series Firewall in Azure](https://www.paloaltonetworks.com/documentation/81/virtualization/virtualization/bootstrap-the-vm-series-firewall/bootstrap-the-vm-series-firewall-in-azure)
 
