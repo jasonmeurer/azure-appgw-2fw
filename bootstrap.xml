@@ -308,6 +308,47 @@
                 <ip-modulo/>
               </algorithm>
             </ecmp>
+            <routing-table>
+              <ip>
+                <static-route>
+                  <entry name="defaultroute">
+                    <nexthop>
+                      <ip-address>10.55.1.1</ip-address>
+                    </nexthop>
+                    <bfd>
+                      <profile>None</profile>
+                    </bfd>
+                    <path-monitor>
+                      <enable>no</enable>
+                      <failure-condition>any</failure-condition>
+                      <hold-time>2</hold-time>
+                    </path-monitor>
+                    <interface>ethernet1/1</interface>
+                    <metric>10</metric>
+                    <destination>0.0.0.0/0</destination>
+                  </entry>
+                  <entry name="trustnets">
+                    <nexthop>
+                      <ip-address>10.55.41.1</ip-address>
+                    </nexthop>
+                    <bfd>
+                      <profile>None</profile>
+                    </bfd>
+                    <path-monitor>
+                      <enable>no</enable>
+                      <failure-condition>any</failure-condition>
+                      <hold-time>2</hold-time>
+                    </path-monitor>
+                    <interface>ethernet1/2</interface>
+                    <metric>10</metric>
+                    <destination>10.55.32.0/19</destination>
+                    <route-table>
+                      <unicast/>
+                    </route-table>
+                  </entry>
+                </static-route>
+              </ip>
+            </routing-table>
           </entry>
         </virtual-router>
       </network>
@@ -520,16 +561,13 @@
           </import>
           <address>
             <entry name="firewall-untrust-IP">
-              <ip-netmask>192.168.1.4</ip-netmask>
+              <ip-netmask>10.55.1.4</ip-netmask>
             </entry>
             <entry name="internal-load-balancer-IP">
-              <ip-netmask>192.168.41.6</ip-netmask>
-            </entry>
-            <entry name="dbsubnet">
-              <ip-netmask>192.168.43.0/24</ip-netmask>
+              <ip-netmask>10.55.42.50</ip-netmask>
             </entry>
             <entry name="wwwsubnet">
-              <ip-netmask>192.168.42.0/24</ip-netmask>
+              <ip-netmask>10.55.42.0/24</ip-netmask>
             </entry>
             <entry name="azure-probe">
               <ip-netmask>168.63.129.16</ip-netmask>
