@@ -15,15 +15,15 @@ If Bootstrapping is not utilized, set the following parameters to None or leave 
 
 [Bootstrap the VM-Series Firewall in Azure](https://www.paloaltonetworks.com/documentation/81/virtualization/virtualization/bootstrap-the-vm-series-firewall/bootstrap-the-vm-series-firewall-in-azure)
 
-	* customStorageAccount
-	* customAccessKey
-	* customFileShare
-	* customShareDirectory (Not required even if bootstrapping)
+* customStorageAccount
+* customAccessKey
+* customFileShare
+* customShareDirectory (Not required even if bootstrapping)
 
-The Bootstrap file contains a user account u:pandemo p:demopassword.  
-The Bootstrap file contains two objects that should be udpdated post deployment.  
-	The Untrust IP Address and an inside Load Balancer placeholder.
-The Bootstrap file contains a route to the inside Subnets.  If the default subnet is not used, please update accordingly.
+1. The Bootstrap file contains a user account u:pandemo p:demopassword.  
+2. The Bootstrap file contains two objects that should be udpdated post deployment.  
+   - The Untrust IP Address and an inside Load Balancer placeholder.
+3. The Bootstrap file contains a route to the inside Subnets.  If the default subnet is not used, please update accordingly.
 	
 
 **Documentation**
