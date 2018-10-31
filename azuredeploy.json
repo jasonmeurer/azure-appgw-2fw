@@ -23,7 +23,7 @@
     "diagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
-        "description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
+        "description": "Name of the storage account created to store the VM's boot diagnostics.  Storage account name must be globally unique.  Allows for Serial Console access to the Web servers."
       } 
     },    
     "virtualNetworkAddressPrefix": {
@@ -79,14 +79,14 @@
       "type": "string",
       "defaultValue": "Web",
       "metadata": {
-        "description": "Subnet for Trusted Network"
+        "description": "Subnet for Web Server Network"
       }
     },    
     "webSubnetPrefix": {
       "type": "string",
       "defaultValue": "10.55.42.0/24",
       "metadata": {
-        "description": "CIDR for Trusted Network"
+        "description": "CIDR for Web Server Network"
       }
     },    
     "appGatewaySubnetName": {
@@ -120,7 +120,7 @@
       "type": "string",
       "defaultValue": "10.55.42.50",
       "metadata": {
-        "description": "IP of Internal Load Balancer in the Web Subnet"
+        "description": "IP of Internal Load Balancer in the Web Subnet. Will be used as the NAT Destination in the Firewall NAT Policy."
       }
     },    
     "WebVmSize": {
@@ -133,7 +133,7 @@
       ],
       "defaultValue": "Standard_A1_v2",
       "metadata": {
-        "description": "This is the allowed list of VM sizes"
+        "description": "Will be used as the NAT Destination in the Firewall NAT Policy."
       }
     },
     "webVmName": {
@@ -146,7 +146,7 @@
     "webAvSet": {
       "type": "string",
         "metadata": {
-          "description": "Firewall Availability Set Name"
+          "description": "Web Server Availability Set Name"
         },
       "defaultValue" : "WebAvSet"
     },    
@@ -168,14 +168,14 @@
     "firewallVmName": {
        "type": "string",
        "metadata": {
-          "description": "Name prefix of VM-Series VM in the Azure portal"
+          "description": "Name prefix of VM-Series VM in the Azure portal."
        },
        "defaultValue": "FW"
     },
     "firewallFwAvSet": {
     	"type": "string",
       	"metadata": {
-    			"description": "Firewall Availability Set Name"
+    			"description": "Firewall Availability Set Name."
     		},
     	"defaultValue" : "FwAvSet"
     },
@@ -188,7 +188,7 @@
           "bundle2"
        ],
        "metadata": {
-           "description": "byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
+           "description": "Firewall license type. byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
        }
     },
     "imageVersion": {
@@ -257,7 +257,7 @@
     "nsgName": {
         "type": "string",
         "metadata": {
-        	"description": "Network Security Group Base Name"
+        	"description": "Network Security Group Base Name.  Applied to both Management and Untrust Subnets."
       },
       "defaultValue": "nsg"
     },
@@ -272,14 +272,14 @@
       "type": "string",
       "defaultValue": "azureadmin",
       "metadata": {
-        "description": "Username of the administrator account of VM instances"
+        "description": "Username of the administrator account of VM instances and Web Servers."
       }
     },
     "password": {
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
-        "description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
+        "description": "Password for the administrator account of all VM instances and Web Servers. Required and must conform to Azure password policies.  Passwords must be between 12 and 72 characters and have 3 of the following: 1 lower case, 1 upper case, 1 number, and 1 special character."
       }
     },
     "customStorageAccount": {
@@ -293,7 +293,7 @@
             "type": "securestring",
             "defaultValue": "None",
             "metadata":{
-              "description": "Storage account access key to read blob data privately"
+              "description": "Storage account access key to read blob data privately."
             }
       },
     "customFileShare": {
@@ -307,7 +307,7 @@
 		"defaultValue": "None",
 		"type": "String",
 		"metadata": {
-                "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
+                "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share."
             }
 	}
 },
