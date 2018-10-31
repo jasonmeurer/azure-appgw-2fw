@@ -277,28 +277,28 @@
     },
     "password": {
       "type": "securestring",
-      "defaultValue": "azure@dmin123",
+      "defaultValue": "",
       "metadata": {
         "description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
       }
     },
     "customStorageAccount": {
             "type": "string",
-            "defaultValue": "jjmbootstrape2",
+            "defaultValue": "None",
             "metadata":{
               "description": "Name of storage account for bootstrap"
             }
       },
     "customAccessKey": {
             "type": "securestring",
-            "defaultValue": "9xfaa5fvX34wSM+2uMry9AOpqjfeB5/VLi5qvQcNOi8Wdk1B+hbL7zC8Bm5uLeptqRF6u14PWuFlGjY9ZuIbxw==",
+            "defaultValue": "None",
             "metadata":{
               "description": "Storage account access key to read blob data privately"
             }
       },
     "customFileShare": {
             "type": "string",
-            "defaultValue": "jjmfs1",
+            "defaultValue": "None",
             "metadata":{
               "description": "File Share containing bootstrap file"
             }
