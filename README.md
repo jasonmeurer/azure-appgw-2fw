@@ -1,4 +1,4 @@
-# Using Deploy up to 6 VM-Series Firewalls with an Application Gateway, up to 6 web servers fronted by an internal Load Balancer.
+# Deploy up to 6 VM-Series Firewalls with an Application Gateway and up to 6 web servers fronted by an internal Load Balancer.
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
 
