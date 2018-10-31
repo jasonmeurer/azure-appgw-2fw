@@ -20,6 +20,12 @@
        	"description": "Select whether to use a new or existing Virtual Network, specified by virtualNetworkName"
        }
     },
+    "diagnosticsStorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
+      } 
+    },    
     "virtualNetworkAddressPrefix": {
       "type": "string",
       "defaultValue": "10.55.0.0/16",
@@ -64,11 +70,25 @@
     },
     "trustSubnetPrefix": {
       "type": "string",
-      "defaultValue": "10.55.42.0/24",
+      "defaultValue": "10.55.41.0/24",
       "metadata": {
         "description": "CIDR for Trusted Network"
       }
     },
+    "webSubnetName": {
+      "type": "string",
+      "defaultValue": "Web",
+      "metadata": {
+        "description": "Subnet for Trusted Network"
+      }
+    },    
+    "webSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.55.42.0/24",
+      "metadata": {
+        "description": "CIDR for Trusted Network"
+      }
+    },    
     "appGatewaySubnetName": {
       "type": "string",
       "defaultValue": "AppGWSubnet",
@@ -96,6 +116,55 @@
         "description": "App Gateway Public IP DNS Name. Must be globally unique."
       }
     },
+    "privateLbAddress": {
+      "type": "string",
+      "defaultValue": "10.55.42.50",
+      "metadata": {
+        "description": "IP of Internal Load Balancer in the Web Subnet"
+      }
+    },    
+    "WebVmSize": {
+      "type": "string",
+      "allowedValues": [
+         "Standard_A1_v2",
+         "Standard_A1",
+         "Standard_D1",
+         "Standard_D1_v2"
+      ],
+      "defaultValue": "Standard_A1_v2",
+      "metadata": {
+        "description": "This is the allowed list of VM sizes"
+      }
+    },
+    "webVmName": {
+       "type": "string",
+       "metadata": {
+          "description": "Name prefix of Web Server in the Azure portal"
+       },
+       "defaultValue": "WEB"
+    },  
+    "webAvSet": {
+      "type": "string",
+        "metadata": {
+          "description": "Firewall Availability Set Name"
+        },
+      "defaultValue" : "WebAvSet"
+    },    
+    "webCount": {
+      "type": "int",
+      "defaultValue": 2,
+      "allowedValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "metadata": {
+        "description": "Select the number of web servers to deploy.  Minimum is 1, maximum is 6."
+      }
+    },      
     "firewallVmName": {
        "type": "string",
        "metadata": {
@@ -103,12 +172,12 @@
        },
        "defaultValue": "FW"
     },
-    "firewallAvSet": {
+    "firewallFwAvSet": {
     	"type": "string",
       	"metadata": {
     			"description": "Firewall Availability Set Name"
     		},
-    	"defaultValue" : "AvSet"
+    	"defaultValue" : "FwAvSet"
     },
     "imageSku": {
        "type": "string",
@@ -215,21 +284,21 @@
     },
     "customStorageAccount": {
             "type": "string",
-            "defaultValue": "jjmeast2bootstrap",
+            "defaultValue": "jjmbootstrape2",
             "metadata":{
               "description": "Name of storage account for bootstrap"
             }
       },
     "customAccessKey": {
             "type": "securestring",
-            "defaultValue": "kvO3UatZlLDLLN1atOp1kDl43kOBd5iG6UmGZ1WhYHojtvLUBGcutjiZUVoCoQHb5UL8zEBPBiHjVD8RjLmdtg==",
+            "defaultValue": "9xfaa5fvX34wSM+2uMry9AOpqjfeB5/VLi5qvQcNOi8Wdk1B+hbL7zC8Bm5uLeptqRF6u14PWuFlGjY9ZuIbxw==",
             "metadata":{
               "description": "Storage account access key to read blob data privately"
             }
       },
     "customFileShare": {
             "type": "string",
-            "defaultValue": "jjme2fs",
+            "defaultValue": "jjmfs1",
             "metadata":{
               "description": "File Share containing bootstrap file"
             }
@@ -244,20 +313,28 @@
 },
   "variables": {
     "location" : "[resourceGroup().location]",
-	"imagePublisher": "paloaltonetworks",
+    "imagePublisher": "paloaltonetworks",
     "imageOffer" : "vmseries1",
     "rgname" : "[resourceGroup().name]",
     "LoadBalancerType" : "layer-7",
     "apiVersion": "2018-06-01",
+    "webImagePublisher": "Canonical",
+    "webImageOffer": "UbuntuServer",
+    "webImageSKU": "16.04.0-LTS",
+    "lbName": "[concat(parameters('virtualNetworkName'), '-lb')]",
     "customDataField": "[concat('storage-account=', parameters('customStorageAccount'), ',access-key=', parameters('customAccessKey'), ',file-share=', parameters('customFileShare'), ',share-directory=', parameters('customShareDirectory'))]",
-	"pipAppGw": "[concat(parameters('appGatewayDnsName'),'pipAppGw')]",
-	"appgwsubnetref": "[concat(variables('vnetID'),'/subnets/',parameters('appGatewaySubnetName'))]",
-	"vnetname": "[parameters('virtualNetworkName')]",
+    "webCustomDataField": "",
+    "diagnosticsStorageAccountType": "Standard_LRS",
+    "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('lbName'))]",
+    "pipAppGw": "[concat(parameters('appGatewayDnsName'),'pipAppGw')]",
+    "appgwsubnetref": "[concat(variables('vnetID'),'/subnets/',parameters('appGatewaySubnetName'))]",
+    "vnetname": "[parameters('virtualNetworkName')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetname'))]",
     "appGwSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('appGatewaySubnetName'))]",
     "subnetRefMgmt": "[concat(variables('vnetID'),'/subnets/',parameters('mgmtSubnetName'))]",
     "subnetRefUntrust": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
     "subnetRefTrust": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
+    "subnetRefWeb": "[concat(variables('vnetID'),'/subnets/',parameters('webSubnetName'))]",
     "subnetLBRef": "[concat(variables('vnetID'),'/subnets/',parameters('appGatewaySubnetName'))]",
     "rttablename": "[concat('rt',parameters('virtualNetworkName'))]",
     "applicationGatewayID": "[resourceId('Microsoft.Network/applicationGateways',parameters('appGatewayName'))]",
@@ -286,6 +363,12 @@
           "addressPrefix": "[parameters('trustSubnetPrefix')]"
         }
       },
+      {
+        "name": "[parameters('webSubnetName')]",
+        "properties": {
+          "addressPrefix": "[parameters('webSubnetPrefix')]"
+        }
+      },      
       {
         "name": "[parameters('appGatewaySubnetName')]",
         "properties": {
@@ -534,7 +617,32 @@
 			]
 		}
 	},
-
+{
+    "type": "Microsoft.Network/networkInterfaces",
+    "name": "[concat(parameters('webVmName'),'WebNic',copyindex())]",
+    "apiVersion": "[variables('apiVersion')]",
+    "location": "[resourceGroup().location]",
+      "dependsOn": [
+      "[parameters('virtualNetworkName')]"
+      ],
+    "copy": {
+      "name": "NicLoopTrust",
+      "count": "[parameters('webCount')]"
+    },
+    "properties": {
+      "ipConfigurations": [
+        {
+          "name": "ipconfig1",
+          "properties": {
+            "privateIPAllocationMethod": "Dynamic",
+            "subnet": {
+              "id": "[variables('subnetRefWeb')]"
+            }
+          }
+        }
+      ]
+    }
+  },  
 	{
 	  "name": "[parameters('appGatewayName')]",
 	  "apiVersion": "[variables('apiVersion')]",
@@ -629,9 +737,22 @@
 		]
 		}
 	},
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('webAvSet')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+      "name": "Aligned"
+      },
+      "properties": {
+      "platformFaultDomainCount": "3",
+      "platformUpdateDomainCount": "20"
+      }
+    },  
 		{
 		  "type": "Microsoft.Compute/availabilitySets",
-		  "name": "[parameters('firewallAvSet')]",
+		  "name": "[parameters('firewallFwAvSet')]",
 		  "apiVersion": "[variables('apiVersion')]",
 		  "location": "[resourceGroup().location]",
 		  "sku": {
@@ -642,6 +763,214 @@
 			"platformUpdateDomainCount": "20"
 		  }
 		},
+    {
+      "name": "[parameters('diagnosticsStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "location": "[resourceGroup().location]",
+      "properties": {},
+      "kind": "Storage",
+      "sku": {
+          "name": "[variables('diagnosticsStorageAccountType')]"
+      },
+      "tags": {}
+    },    
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('webVmName'),copyindex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "webLoop",
+        "count": "[parameters('webCount')]"
+    },
+        "dependsOn": [
+         "[parameters('webAvSet')]",
+         "[parameters('diagnosticsStorageAccountName')]",
+         "[concat(parameters('webVmName'),'WebNic',copyindex())]"
+      ],
+        "properties": {
+            "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('webAvSet'))]"
+                },
+            "hardwareProfile": {
+                "vmSize": "[parameters('WebVmSize')]"
+            },
+            "osProfile": {
+                "computerName": "[parameters('webVmName')]",
+                "adminUsername": "[parameters('username')]",
+                "adminPassword": "[parameters('password')]"
+            },
+            "diagnosticsProfile": {
+                "bootDiagnostics": {
+                    "enabled": true,
+                    "storageUri": "[concat('https://', parameters('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
+                }
+            },            
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "[variables('webImagePublisher')]",
+                    "offer": "[variables('webImageOffer')]",
+                    "sku": "[variables('webImageSKU')]",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "name": "[concat(parameters('webVmName'),'disk',copyindex())]",
+                    "managedDisk": {
+                            "storageAccountType": "[parameters('storageAccountType')]"
+                    },
+                    "caching": "ReadWrite",
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [{
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('webVmName'),'WebNic',copyindex()))]",
+                    "properties": {
+                        "primary": true
+                    }
+                }]
+            }
+        }
+    }, 
+    {
+    "name": "[concat(parameters('webVmName'),copyindex(),'/installcustomscript')]",
+    "type": "Microsoft.Compute/virtualMachines/extensions",
+      "copy": {
+        "name": "apacheLoop",
+        "count": "[parameters('webCount')]"
+      },
+    "location": "[resourceGroup().location]",
+    "apiVersion": "[variables('apiVersion')]",
+    "dependsOn": ["webLoop"],
+    "tags": {
+        "displayName": "scriptextensiondemo"
+    },
+    "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": ["https://raw.githubusercontent.com/jasonmeurer/azure-appgw-2fw/master/webstage.sh"],
+          "commandToExecute": "[concat('sudo bash ./webstage.sh')]"
+          }
+        }
+    }, 
+{
+      "apiVersion": "2017-10-01",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[variables('lbName')]",
+      "dependsOn": [
+        "[parameters('virtualNetworkName')]"
+      ],
+      "location": "[resourceGroup().location]",
+      "sku":
+            {
+                "name": "Standard"
+            },
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRefWeb')]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('privateLbAddress')]"
+            },
+            "name": "LoadBalancerFrontend"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "webBePool"
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/backendAddressPools/webBePool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/probes/lbprobe')]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 80,
+              "backendPort": 80,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbrule"
+          }
+            
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 80,
+              "intervalInSeconds": 15,
+              "numberOfProbes": 2
+            },
+            "name": "lbprobe"
+          }
+        ]
+      }
+    }, 
+{
+      "apiVersion": "2015-01-01",
+      "type": "Microsoft.Resources/deployments",
+      "name": "[concat('AddNIC2pool', copyindex())]",
+      "dependsOn": [
+          "[variables('lbName')]",
+          "webLoop",
+          "apacheLoop"
+          ],
+      "copy": {
+        "name": "updatenicloop",
+        "count": "[parameters('webCount')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "parameters": {},
+        "template": {
+          "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+              {
+                "apiVersion": "2017-08-01",
+                "type": "Microsoft.Network/networkInterfaces",
+                "name": "[concat(parameters('webVmName'),'WebNic',copyindex())]",
+                "location": "[resourceGroup().location]",
+                "properties": {
+                    "ipConfigurations": [
+                    {
+                      "name": "ipconfig1",
+                      "properties": {
+                        "subnet": {
+                          "id": "[variables('subnetRefWeb')]"
+                        },
+                        "loadBalancerBackendAddressPools": [
+                          {
+                            "id": "[concat(variables('lbID'), '/backendAddressPools/webBePool')]"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+            }
+        }
+      },             
 		{
         "apiVersion": "[variables('apiVersion')]",
         "type": "Microsoft.Compute/virtualMachines",
@@ -652,10 +981,10 @@
 			"count": "[parameters('firewallCount')]"
 		},
         "dependsOn": [
-         "[parameters('firewallAvSet')]",
+         "[parameters('firewallFwAvSet')]",
       	 "[concat(parameters('firewallVmName'),'MgmtNic',copyindex())]",
-		 "[concat(parameters('firewallVmName'),'UntrustNic',copyindex())]",
-		 "[concat(parameters('firewallVmName'),'TrustNic',copyindex())]"
+		     "[concat(parameters('firewallVmName'),'UntrustNic',copyindex())]",
+		     "[concat(parameters('firewallVmName'),'TrustNic',copyindex())]"
       ],
         "plan": {
            "name": "[parameters('imageSku')]",
@@ -664,7 +993,7 @@
         },
         "properties": {
           	"availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('firewallAvSet'))]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('firewallFwAvSet'))]"
                 },
             "hardwareProfile": {
                 "vmSize": "[parameters('firewallVmSize')]"
