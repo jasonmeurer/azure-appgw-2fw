@@ -21,7 +21,7 @@ If Bootstrapping is not utilized, set the following parameters to None or leave 
 * customShareDirectory (Not required even if bootstrapping)
 
 1. The Bootstrap file contains a user account u:pandemo p:demopassword.  
-2. The Bootstrap file contains two objects that should be udpdated post deployment.  
+2. The Bootstrap file contains two objects that should be updated post deployment.  
    - The Untrust IP Address and an inside Load Balancer placeholder.
 3. The Bootstrap file contains a route to the inside Subnets.  If the default subnet is not used, please update accordingly.
 	
