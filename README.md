@@ -2,7 +2,7 @@
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjasonmeurer%2Fazure-appgw-2fw%2Fmaster%2Fazuredeploy.json)
 
-[<img src="https://raw.githubusercontent.com/jasonmeurer/azure-appgw-2fw/master/diagram.png"/>]
+<img src="https://raw.githubusercontent.com/jasonmeurer/azure-appgw-2fw/master/diagram.png"/>
 
 **Can be deployed to a New or Existing Resource Group and New or Existing VNET**
 
