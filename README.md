@@ -11,7 +11,7 @@ When deploying into an existing VNET, the Subnet Names and Prefixes must match t
 The Firewalls will be deployed with Standard SKU Public IP addresses and Managed Disks.  Standard SKU PIPs were chosen to support the use of a Standard SKU Load Balancer should the design warrant.
 
 While bootstrapping is not required, sample Bootstrap File and Init-cfg.txt files have been included in this repository.  
-If Bootstrapping is not utilized, seT the following parameters to None or leave blank.
+If Bootstrapping is not utilized, set the following parameters to None or leave blank.
 
 [Bootstrap the VM-Series Firewall in Azure](https://www.paloaltonetworks.com/documentation/81/virtualization/virtualization/bootstrap-the-vm-series-firewall/bootstrap-the-vm-series-firewall-in-azure)
 
